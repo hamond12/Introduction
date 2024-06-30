@@ -1,6 +1,5 @@
 package com.example.introduction
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -12,6 +11,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+
         val editTextName = findViewById<EditText>(R.id.editTextName)
         val editTextId = findViewById<EditText>(R.id.editTextId)
         val editTextPw = findViewById<EditText>(R.id.editTextPw)
@@ -22,6 +22,9 @@ class SignUpActivity : AppCompatActivity() {
             if(editTextName.text.isBlank() || editTextId.text.isBlank() || editTextPw.text.isBlank()){
                 Toast.makeText(this, "입력되지 않은 정보가 있습니다.", Toast.LENGTH_SHORT).show()
             }else{
+                intent.putExtra("id", editTextId.text.toString())
+                intent.putExtra("pw", editTextPw.text.toString())
+                setResult(RESULT_OK, intent)
                 finish()
             }
         }

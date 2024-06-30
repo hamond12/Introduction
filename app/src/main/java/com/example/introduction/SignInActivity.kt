@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
 class SignInActivity : AppCompatActivity() {
+
+    private lateinit var signUpResult: ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
@@ -17,6 +21,15 @@ class SignInActivity : AppCompatActivity() {
 
         val loginButton = findViewById<Button>(R.id.loginButton)
         val signUpButton = findViewById<Button>(R.id.signUpButton)
+
+        signUpResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+            if (it.resultCode == RESULT_OK) {
+                val id = it.data?.getStringExtra("id")?:""
+                val pw = it.data?.getStringExtra("pw")?:""
+                editTextId.setText(id)
+                editTextPw.setText(pw)
+            }
+        }
 
         loginButton.setOnClickListener {
             if (editTextId.text.isBlank() || editTextPw.text.isBlank()) {
@@ -31,7 +44,7 @@ class SignInActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+            signUpResult.launch(intent)
         }
     }
 }
